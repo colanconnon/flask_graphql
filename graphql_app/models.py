@@ -2,7 +2,11 @@
 """User models."""
 import datetime as dt
 from .database import Column, Model, SurrogatePK, db, reference_col, relationship
-
+import datetime
+import jwt
+import os
+from werkzeug.security import generate_password_hash, \
+     check_password_hash
 
 class Author(SurrogatePK, Model):
 
@@ -41,3 +45,23 @@ class Reader(SurrogatePK, Model):
         "Book",
         secondary=book_reader_association_table,
         back_populates="readers")
+
+
+class User(SurrogatePK, Model):
+    __tablename__ = 'users'
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String())
+    password_hash = db.Column(db.String())
+    
+    @classmethod
+    def get_password_hash(cls, password):
+        return generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+    def is_valid(self):
+        if self.username is None or len(self.username) == 0:
+            return False
+        return True

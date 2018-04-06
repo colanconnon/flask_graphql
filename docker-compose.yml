@@ -1,0 +1,30 @@
+version: '2'
+services:
+  db:
+    restart: always
+    image: postgres
+    environment:
+        POSTGRES_PASSWORD: secret
+        POSTGRES_USER: flask
+        POSTGRES_DB: flask_db
+    ports:
+      - "5432:5432"
+  web:
+    build: .
+    restart: always
+    command: bash ./deploy/start_dev.sh
+    environment: 
+      - FLASK_ENV=development
+    volumes:
+      - .:/src
+    ports:
+      - "8002:8000"
+    depends_on:
+      - db
+  nginx:
+    restart: always
+    build: ./deploy/nginx/.
+    ports:
+        - "82:80"
+    links:
+        - web:web
