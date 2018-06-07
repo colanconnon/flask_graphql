@@ -16,3 +16,4 @@ class Config(object):
     DEBUG_TB_ENABLED = True
     SQLALCHEMY_RECORD_QUERIES = True
     SECRET_KEY = 'secret-key'  # TODO: Change me
+    SQLALCHEMY_TRACK_MODIFICATIONS = False

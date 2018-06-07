@@ -23,8 +23,11 @@ def create_app(main=True, config_object=Config):
     from .auth.routes import auth_routes
     app.register_blueprint(auth_routes)
     from .schema import schema
-
+    #  uncomment for jwt
+    #  app.add_url_rule(
+        # '/graphql', view_func=jwt_required(GraphQLView.as_view('graphql', schema=schema, graphiql=True))
+    # )
     app.add_url_rule(
-        '/graphql', view_func=jwt_required(GraphQLView.as_view('graphql', schema=schema, graphiql=True))
+        '/graphql', view_func=GraphQLView.as_view('graphql', schema=schema, graphiql=True)
     )
     return app
